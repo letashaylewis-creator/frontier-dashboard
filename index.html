@@ -306,14 +306,14 @@
       const navDate = yesterday.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
       document.getElementById('nav-date').textContent = navDate;
 
-      let res = await fetch(`${url}/rest/v1/worker_activity?date=eq.${dateStr}&select=*&order=tracked_seconds.desc`, {
+      let res = await fetch(`${url}/rest/v1/worker_daily_summary?date=eq.${dateStr}&select=*&order=tracked_seconds.desc`, {
         headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
       });
       if (!res.ok) throw new Error(`Status ${res.status} — check your credentials`);
       let data = await res.json();
 
       if (!data.length) {
-        res = await fetch(`${url}/rest/v1/worker_activity?select=*&order=created_at.desc&limit=50`, {
+        res = await fetch(`${url}/rest/v1/worker_daily_summary?select=*&order=created_at.desc&limit=50`, {
           headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
         });
         data = await res.json();
