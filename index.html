@@ -35,27 +35,28 @@
 
     /* Top nav */
     .topnav {
-      background: var(--navy-dark);
+      background: #f0f3f7;
+      border-bottom: 1px solid #e0e0e0;
       padding: 0 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 56px;
+      height: 64px;
     }
     .topnav-logo { color: white; font-size: 16px; font-weight: 600; letter-spacing: 0.02em; }
     .topnav-logo span { color: var(--navy-mid); }
     .topnav-right { display: flex; align-items: center; gap: 16px; }
-    .topnav-date { font-size: 12px; color: var(--navy-mid); }
+    .topnav-date { font-size: 12px; color: var(--text-muted); }
     .refresh-btn {
       background: transparent;
-      border: 1px solid rgba(255,255,255,0.2);
-      color: white;
+      border: 1px solid var(--border);
+      color: var(--text);
       padding: 6px 14px;
       border-radius: 6px;
       font-size: 12px;
       cursor: pointer;
     }
-    .refresh-btn:hover { background: rgba(255,255,255,0.1); }
+    .refresh-btn:hover { background: #e0e0e0; }
 
     /* Layout */
     .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
@@ -190,7 +191,7 @@
 <body>
 
 <nav class="topnav">
-  <div class="topnav-logo"><img src="frontier logo clear.png" alt="Frontier" style="height:32px;vertical-align:middle;" /></div>
+  <div class="topnav-logo"><img src="logo.png" alt="Frontier" style="height:44px;vertical-align:middle;" /></div>
   <div class="topnav-right">
     <span class="topnav-date" id="nav-date"></span>
     <button class="refresh-btn" onclick="loadData()">Refresh</button>
