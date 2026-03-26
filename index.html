@@ -315,38 +315,43 @@
     try {
       const picker = document.getElementById('date-picker');
 
-      // If no date selected, default to today
+      // If no date selected, find the most recent date with data and set it
       if (!picker.value) {
-        picker.value = new Date().toISOString().split('T')[0];
-      }
-
-      let dateStr = picker.value;
-
-      let res = await fetch(`${url}/rest/v1/worker_daily_summary?date=eq.${dateStr}&select=*&order=tracked_seconds.desc`, {
-        headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
-      });
-      if (!res.ok) throw new Error(`Status ${res.status} — check your credentials`);
-      let data = await res.json();
-
-      // If no data for selected date, find the most recent date with data
-      if (!data.length) {
-        res = await fetch(`${url}/rest/v1/worker_daily_summary?select=*&order=date.desc&limit=1`, {
+        const latestRes = await fetch(`${url}/rest/v1/worker_daily_summary?select=date&order=date.desc&limit=1`, {
           headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
         });
-        const latest = await res.json();
-        if (latest.length) {
-          dateStr = latest[0].date;
-          picker.value = dateStr;
-          res = await fetch(`${url}/rest/v1/worker_daily_summary?date=eq.${dateStr}&select=*&order=tracked_seconds.desc`, {
-            headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
-          });
-          data = await res.json();
-        }
+        if (!latestRes.ok) throw new Error(`Status ${latestRes.status} — check your credentials`);
+        const latestRows = await latestRes.json();
+        if (!latestRows.length) { showError('No data found. Make sure your Make.com scenario has run at least once.'); return; }
+        picker.value = latestRows[0].date;
       }
 
-      if (!data.length) { showError('No data found. Make sure your Make.com scenario has run at least once.'); return; }
+      const dateStr = picker.value;
 
-      renderDashboard(data);
+      // Fetch worker data for the selected date
+      const dataRes = await fetch(`${url}/rest/v1/worker_daily_summary?date=eq.${dateStr}&select=*&order=tracked_seconds.desc`, {
+        headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
+      });
+      if (!dataRes.ok) throw new Error(`Status ${dataRes.status} — check your credentials`);
+      const data = await dataRes.json();
+
+      if (!data.length) { showError(`No data found for ${dateStr}. Please select a different date.`); return; }
+
+      // Fetch AI summary separately for the selected date
+      const aiRes = await fetch(`${url}/rest/v1/daily_ai_summary?date=eq.${dateStr}&select=summary&limit=1`, {
+        headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
+      });
+      let aiSummary = null;
+      if (aiRes.ok) {
+        const aiRows = await aiRes.json();
+        aiSummary = aiRows[0]?.summary || null;
+      }
+      // Fallback: check ai_summary field on worker rows for this date
+      if (!aiSummary) {
+        aiSummary = data.find(r => r.ai_summary)?.ai_summary || null;
+      }
+
+      renderDashboard(data, aiSummary, dateStr);
     } catch(e) {
       showError('Connection failed: ' + e.message);
       document.getElementById('setup-card').style.display = 'block';
@@ -355,7 +360,7 @@
     }
   }
 
-  function renderDashboard(rows) {
+  function renderDashboard(rows, aiSummary, dateStr) {
     document.getElementById('main-content').style.display = 'block';
 
     const total = rows.length;
@@ -363,7 +368,7 @@
     const avg = rows.reduce((a, r) => a + (r.tracked_seconds || 0), 0) / total / 3600;
     const full = rows.filter(r => (r.tracked_seconds || 0) >= 28800).length;
 
-    document.getElementById('data-date').textContent = rows[0]?.date || '';
+    document.getElementById('data-date').textContent = dateStr || rows[0]?.date || '';
     document.getElementById('metrics').innerHTML = `
       <div class="metric"><div class="metric-label">Total workers</div><div class="metric-value navy">${total}</div></div>
       <div class="metric"><div class="metric-label">Avg hours</div><div class="metric-value ${avg >= 6 ? 'good' : 'warn'}">${avg.toFixed(1)}h</div></div>
@@ -399,9 +404,8 @@
         </div>`;
     }).join('');
 
-    const summary = rows.find(r => r.ai_summary)?.ai_summary || 'No AI summary available for this date.';
-    document.getElementById('ai-text').textContent = summary;
-    document.getElementById('ai-subtitle').textContent = `Generated for ${rows[0]?.date || 'today'}`;
+    document.getElementById('ai-text').textContent = aiSummary || 'No AI summary available for this date.';
+    document.getElementById('ai-subtitle').textContent = `Generated for ${dateStr || rows[0]?.date || 'today'}`;
   }
 
   function showError(msg) {
