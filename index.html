@@ -6,37 +6,37 @@
   <title>Frontier Dashboard</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
     :root {
-      --navy: #0C447C;
-      --navy-dark: #042C53;
-      --navy-light: #185FA5;
-      --navy-pale: #E6F1FB;
-      --navy-mid: #B5D4F4;
-      --green: #3B6D11;
-      --green-light: #EAF3DE;
+      --navy: #1E7A6E;
+      --navy-dark: #1A2B35;
+      --navy-light: #25A090;
+      --navy-pale: #E4F4F2;
+      --navy-mid: #8FD4CC;
+      --green: #1A7A5E;
+      --green-light: #E2F4EE;
       --red: #A32D2D;
       --red-light: #FCEBEB;
       --red-mid: #F09595;
       --text: #1a1a1a;
       --text-muted: #6b6b6b;
-      --border: #e0e0e0;
-      --bg: #f4f6f9;
+      --border: #d8e6e4;
+      --bg: #f2f7f7;
       --card: #ffffff;
-      --card-secondary: #f0f3f7;
+      --card-secondary: #edf4f3;
     }
-
+ 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
     }
-
+ 
     /* Top nav */
     .topnav {
-      background: #f0f3f7;
-      border-bottom: 1px solid #e0e0e0;
+      background: #1A2B35;
+      border-bottom: 1px solid #243f4d;
       padding: 0 2rem;
       display: flex;
       align-items: center;
@@ -46,21 +46,21 @@
     .topnav-logo { color: white; font-size: 16px; font-weight: 600; letter-spacing: 0.02em; }
     .topnav-logo span { color: var(--navy-mid); }
     .topnav-right { display: flex; align-items: center; gap: 16px; }
-    .topnav-date { font-size: 12px; color: var(--text-muted); }
+    .topnav-date { font-size: 12px; color: #8FD4CC; }
     .refresh-btn {
       background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
+      border: 1px solid #3a5a6a;
+      color: #c8e8e5;
       padding: 6px 14px;
       border-radius: 6px;
       font-size: 12px;
       cursor: pointer;
     }
-    .refresh-btn:hover { background: #e0e0e0; }
-
+    .refresh-btn:hover { background: #243f4d; }
+ 
     /* Layout */
     .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-
+ 
     /* Setup card */
     .setup-card {
       background: var(--card);
@@ -88,7 +88,7 @@
     .connect-btn {
       width: 100%;
       padding: 11px;
-      background: var(--navy);
+      background: #1E7A6E;
       color: white;
       border: none;
       border-radius: 8px;
@@ -97,8 +97,8 @@
       cursor: pointer;
       margin-top: 0.5rem;
     }
-    .connect-btn:hover { background: var(--navy-light); }
-
+    .connect-btn:hover { background: #25A090; }
+ 
     /* Metrics row */
     .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 2rem; }
     .metric {
@@ -112,11 +112,11 @@
     .metric-value.good { color: var(--green); }
     .metric-value.warn { color: var(--red); }
     .metric-value.navy { color: var(--navy); }
-
+ 
     /* Section title */
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
     .section-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
-
+ 
     /* Worker grid */
     .workers { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-bottom: 2rem; }
     .worker-card {
@@ -126,9 +126,9 @@
       border-left: 4px solid var(--border);
       padding: 1.25rem;
     }
-    .worker-card.ok { border-left-color: #639922; }
+    .worker-card.ok { border-left-color: #1E7A6E; }
     .worker-card.flagged { border-left-color: #E24B4A; }
-
+ 
     .worker-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
     .worker-avatar {
       width: 38px; height: 38px; border-radius: 50%;
@@ -147,21 +147,21 @@
     }
     .status-pill.ok { background: var(--green-light); color: var(--green); }
     .status-pill.warn { background: var(--red-light); color: var(--red); }
-
+ 
     .hours-section { margin-bottom: 12px; }
     .hours-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
     .hours-row strong { color: var(--text); font-weight: 600; }
     .bar-bg { background: var(--card-secondary); border-radius: 4px; height: 6px; overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
-    .bar-fill.good { background: #639922; }
+    .bar-fill.good { background: #1E7A6E; }
     .bar-fill.warn { background: #E24B4A; }
-
+ 
     .worker-stats { display: flex; gap: 0; border-top: 1px solid var(--border); padding-top: 12px; }
     .stat-item { flex: 1; text-align: center; }
     .stat-item:not(:last-child) { border-right: 1px solid var(--border); }
     .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
     .stat-value { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 3px; }
-
+ 
     /* AI Summary */
     .ai-card {
       background: var(--card);
@@ -180,27 +180,27 @@
     .ai-title { font-size: 14px; font-weight: 600; color: var(--text); }
     .ai-subtitle { font-size: 12px; color: var(--text-muted); }
     .ai-text { font-size: 13px; color: var(--text-muted); line-height: 1.7; white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
-
+ 
     /* Error / loading */
     .error-box { background: var(--red-light); border: 1px solid var(--red-mid); border-radius: 8px; padding: 1rem 1.25rem; font-size: 13px; color: var(--red); margin-bottom: 1rem; }
     .loading { text-align: center; padding: 4rem 2rem; color: var(--text-muted); font-size: 14px; }
-    .loading-spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--navy); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
+    .loading-spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: #1E7A6E; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-
+ 
 <nav class="topnav">
-  <div class="topnav-logo"><img src="logo.png" alt="Frontier" style="height:44px;vertical-align:middle;" /></div>
+  <div class="topnav-logo"><img style="height:44px;vertical-align:middle;background:#fff;border-radius:6px;padding:4px 8px;" src="data:image/png;base64,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" alt="Frontier" style="height:44px;vertical-align:middle;" /></div>
   <div class="topnav-right">
     <span class="topnav-date" id="nav-date"></span>
     <button class="refresh-btn" onclick="loadData()">Refresh</button>
   </div>
 </nav>
-
+ 
 <div class="container">
   <div id="error" style="display:none;" class="error-box"></div>
-
+ 
   <!-- Setup -->
   <div id="setup-card" class="setup-card">
     <h2>Connect your dashboard</h2>
@@ -215,28 +215,28 @@
     </div>
     <button class="connect-btn" onclick="connectSupabase()">Connect to Supabase</button>
   </div>
-
+ 
   <!-- Loading -->
   <div id="loading" style="display:none;" class="loading">
     <div class="loading-spinner"></div>
     Loading worker activity data...
   </div>
-
+ 
   <!-- Main content -->
   <div id="main-content" style="display:none;">
     <div class="metrics" id="metrics"></div>
-
+ 
     <div class="section-header">
       <span class="section-title">Worker activity</span>
       <span id="data-date" style="font-size:12px;color:var(--text-muted);"></span>
     </div>
     <div class="workers" id="workers"></div>
-
+ 
     <div class="section-header"><span class="section-title">AI daily summary</span></div>
     <div class="ai-card">
       <div class="ai-header">
         <div class="ai-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#0C447C" stroke-width="2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1E7A6E" stroke-width="2">
             <path d="M12 2a10 10 0 1 0 10 10"/>
             <path d="M12 6v6l4 2"/>
           </svg>
@@ -250,11 +250,11 @@
     </div>
   </div>
 </div>
-
+ 
 <script>
   let SUPABASE_URL = '';
   let SUPABASE_KEY = '';
-
+ 
   const WORKER_NAMES = {
     '4050851': 'Akbar Ali Khan',
     '4050909': 'Amjad Iqbal',
@@ -270,15 +270,15 @@
     '4051360': 'Samreen Bibi',
     '4050712': 'Sierra Brown'
   };
-
+ 
   function getWorkerName(user_id) {
     return WORKER_NAMES[String(user_id)] || `Worker ${user_id}`;
   }
-
+ 
   function getInitials(name) {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   }
-
+ 
   function connectSupabase() {
     SUPABASE_URL = document.getElementById('sb-url').value.trim().replace(/\/$/, '');
     SUPABASE_KEY = document.getElementById('sb-key').value.trim();
@@ -288,40 +288,40 @@
     document.getElementById('setup-card').style.display = 'none';
     loadData();
   }
-
+ 
   async function loadData() {
     const url = SUPABASE_URL || localStorage.getItem('sb_url');
     const key = SUPABASE_KEY || localStorage.getItem('sb_key');
     if (!url || !key) { document.getElementById('setup-card').style.display = 'block'; return; }
     SUPABASE_URL = url; SUPABASE_KEY = key;
-
+ 
     document.getElementById('setup-card').style.display = 'none';
     document.getElementById('loading').style.display = 'block';
     document.getElementById('main-content').style.display = 'none';
     document.getElementById('error').style.display = 'none';
-
+ 
     try {
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
       const dateStr = yesterday.toISOString().split('T')[0];
       const navDate = yesterday.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
       document.getElementById('nav-date').textContent = navDate;
-
+ 
       let res = await fetch(`${url}/rest/v1/worker_daily_summary?date=eq.${dateStr}&select=*&order=tracked_seconds.desc`, {
         headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
       });
       if (!res.ok) throw new Error(`Status ${res.status} — check your credentials`);
       let data = await res.json();
-
+ 
       if (!data.length) {
         res = await fetch(`${url}/rest/v1/worker_daily_summary?select=*&order=created_at.desc&limit=50`, {
           headers: { 'apikey': key, 'Authorization': `Bearer ${key}` }
         });
         data = await res.json();
       }
-
+ 
       if (!data.length) { showError('No data found. Make sure your Make.com scenario has run at least once.'); return; }
-
+ 
       renderDashboard(data);
     } catch(e) {
       showError('Connection failed: ' + e.message);
@@ -330,15 +330,15 @@
       document.getElementById('loading').style.display = 'none';
     }
   }
-
+ 
   function renderDashboard(rows) {
     document.getElementById('main-content').style.display = 'block';
-
+ 
     const total = rows.length;
     const flagged = rows.filter(r => (r.tracked_seconds || 0) < 21600).length;
     const avg = rows.reduce((a, r) => a + (r.tracked_seconds || 0), 0) / total / 3600;
     const full = rows.filter(r => (r.tracked_seconds || 0) >= 28800).length;
-
+ 
     document.getElementById('data-date').textContent = rows[0]?.date || '';
     document.getElementById('metrics').innerHTML = `
       <div class="metric"><div class="metric-label">Total workers</div><div class="metric-value navy">${total}</div></div>
@@ -346,7 +346,7 @@
       <div class="metric"><div class="metric-label">Full days</div><div class="metric-value good">${full}</div></div>
       <div class="metric"><div class="metric-label">Flagged</div><div class="metric-value ${flagged > 0 ? 'warn' : 'good'}">${flagged}</div></div>
     `;
-
+ 
     document.getElementById('workers').innerHTML = rows.map(r => {
       const hrs = (r.tracked_seconds || 0) / 3600;
       const pct = Math.min(100, Math.round(hrs / 8 * 100));
@@ -359,7 +359,7 @@
             <div class="worker-avatar ${ok ? '' : 'flagged-av'}">${initials}</div>
             <div class="worker-info">
               <div class="worker-name">${name}</div>
-              <div class="worker-meta">Project ${r.project_id || 'N/A'}</div>
+              <div class="worker-meta">ID: ${r.user_id} &nbsp;·&nbsp; Project ${r.project_id || 'N/A'}</div>
             </div>
             <span class="status-pill ${ok ? 'ok' : 'warn'}">${ok ? 'On track' : 'Flagged'}</span>
           </div>
@@ -374,19 +374,19 @@
           </div>
         </div>`;
     }).join('');
-
+ 
     const summary = rows.find(r => r.ai_summary)?.ai_summary || 'No AI summary available for this date.';
     document.getElementById('ai-text').textContent = summary;
     document.getElementById('ai-subtitle').textContent = `Generated for ${rows[0]?.date || 'today'}`;
   }
-
+ 
   function showError(msg) {
     const el = document.getElementById('error');
     el.style.display = 'block';
     el.textContent = msg;
     document.getElementById('loading').style.display = 'none';
   }
-
+ 
   window.onload = () => {
     const saved_url = localStorage.getItem('sb_url');
     const saved_key = localStorage.getItem('sb_key');
